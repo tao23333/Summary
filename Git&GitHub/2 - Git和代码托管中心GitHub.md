@@ -23,3 +23,6 @@
 > 局域网环境下：自己可以搭建GitLab服务器
 >
 > 外网环境下：可使用GitHub、码云  
+
+GitHub仓库创建时，不必创建README.md文件和协议文件
+README.md文件在本地创建即可

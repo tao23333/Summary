@@ -6,7 +6,7 @@
 >
 > **本地库目录下的文件最原始都处于工作区之中，将其添加到暂存区，Git才会对其进行追踪**
 
-##  
+
 
 ## 添加操作
 
@@ -18,7 +18,15 @@
 >
 > ![img](5 - Git本地基本操作.assets/20200806132235632.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
-##  
+ 
+
+## 恢复操作
+
+> 使用暂时区的内容恢复工作区的内容，放弃工作区的更改
+>
+> git checkout -- 文件名
+
+
 
 ## 提交操作
 
@@ -26,7 +34,7 @@
 >
 > ![img](5 - Git本地基本操作.assets/20200806132705974.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
-##  
+
 
 ## 查看历史版本
 
@@ -65,17 +73,13 @@
 > ![img](5 - Git本地基本操作.assets/20200806141518707.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 >
 > 2、使用^，（只能后退）：**git reset --hard HEAD^**
-> **注：如果没有^，表示回退到当前版本；一**
->
-> 
->
-> **个^表示后退一步，n个表示后退n步**
+> **注：如果没有^，表示回退到当前版本；一个表示后退一步，n个表示后退n步**
 >
 > ![img](5 - Git本地基本操作.assets/20200806143317356.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 >
 > 3、使用~，（只能后退）：**git reset --hard HEAD~n**
 >
-> **注：表示后退n步****，第2种方式的简化**
+> **注：表示后退n步**，第2种方式的简化
 
 
 
@@ -149,3 +153,14 @@
 > **![img](5 - Git本地基本操作.assets/20200806162811339.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)**
 >
 > **![img](5 - Git本地基本操作.assets/20200806162822185.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)**
+
+---
+
+## 同步
+
+> 建议每次写代码前，先同步服务器上该分支的最新数据到本地
+>
+> 1、切换到该分支：git checkout 分支名
+>
+> 2、git pull
+
