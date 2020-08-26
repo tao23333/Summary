@@ -36,6 +36,53 @@
 
 
 
+## 推送操作
+
+- 本地库与远程库建立联系
+
+  使用SSH登录（这样不用每次提交输入账号密码）
+
+  - 进入当前用户家目录 `cd ~`
+
+  - 删除之前产生的.ssh目录 `rm -rvf .ssh`
+
+  - 产生.ssh密钥目录`ssh-keygen -t rsa -C 登陆邮箱`
+
+  - 进入.ssh目录查看文件列表 `cd .ssh`     `ls -a`
+
+  - 查看id_rsa.pub文件内容并复制 `cat id_rsa.pub`
+
+  - 登录GitHub -> 点击头像 -> Settings -> SSH and GPGkeys -> New SSH Key -> 粘贴复制的密钥信息到内容区，题目随意
+
+  - 回到Git Bash创建远程地址别名
+
+    `git remote add origin_ssh 远程库ssh地址`
+
+- 推送文件`git push origin_ssh master`
+
+  > 该命令作用是将本地的master分支推送到origin主机的master分支
+
+### 其他
+
+> - 查看远程仓库别名：`git remote -v`
+>
+> - 删除远程仓库别名：`git remote rm 别名`
+>
+> <font color='red'>git push完整格式：git push <远程主机名> <本地分支名>:<远程分支名></font>
+>
+> - 如果省略远程分支名，则表示将本地分支推送到与之存在==追踪关系==的远程分支(通常同名)，如果远程分支不存在，则会被创建
+>   - 追踪分支：在Git中追踪分支是用来联系本地分支和远程分支的。如果在追踪分支上执行push或者pull时，他会自动推动或拉取到关联的远程分支上
+>     - 如果经常从远程仓库拉取分支到本地，并且不想很麻烦的使用`git pull`这种形式，那么就应当使用追踪分支
+>     - 查看本地分支及追踪的分支：`git branch -vv`
+>     - 建立追踪分支：
+>       1.  `git branch --set-upstream-to=<远程主机名>/<远程分支名> <本地分支名>`
+>       2. 第一次推送加上`-u`参数：`git push -u origin master`,这样本地分支就和服务器同名分支产生追踪关系
+> - 如果当前分支和远程分支都存在追踪关系，则本地分支和远程分支都可以省略：`git push origin_ssh`
+> - 如果当前分支只有一个追踪分支，那么主机名都可省略：`git push`
+> - 如果当前分支与多个主机存在追踪关系，则可使用`-u`指定一个默认主机，这样下次推送就可以直接使用git push： `git push -u origin_ssh master`
+
+
+
 ## 查看历史版本
 
 > 1、**git log**
@@ -156,11 +203,16 @@
 
 ---
 
-## 同步
+## 同步/拉取
 
 > 建议每次写代码前，先同步服务器上该分支的最新数据到本地
 >
 > 1、切换到该分支：git checkout 分支名
 >
-> 2、git pull
+> 2、如果拉取的分支与当前分支存在追踪关系：git pull
+>
+> - pull = fetch + merge
+> - git fetch [远程地址库别名] [远程分支名]
+> - git merge [远程地址库别命/远程分支名] 
+> - git pull [远程地址库别名] [远程分支名]
 
