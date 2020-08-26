@@ -12,6 +12,8 @@
 
 > 将工作区的“新建/修改”添加到暂存区：**git add [fileName]**
 >
+> 该命令用于Git追踪文件
+>
 > ![img](5 - Git本地基本操作.assets/20200806132117394.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 >
 > 此时，再次查看状态：
@@ -34,7 +36,9 @@
 >
 > ![img](5 - Git本地基本操作.assets/20200806132705974.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
+### 补充
 
+> 如果某个文件已被追踪过，若对其再次修改，可以直接`git commit -am 'msg'`将所有追踪的且发生变化的文件一次性提交
 
 ## 推送操作
 
