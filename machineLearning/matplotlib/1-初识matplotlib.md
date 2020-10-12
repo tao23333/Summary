@@ -27,6 +27,7 @@ matplotlib是Python的一个绘图库，专门用于开发2D图表，以渐进�
      ```
 
 3. .绘制图像（折线图为例）：`plt.plot(x, y)`
+   
    - x，y分别代表x轴数据，y轴数据
 4. 显示图像：` plt.show()`
 
@@ -55,4 +56,4 @@ plt.show()
 
 # matplotlib图像结构
 
-![matplotlib图像结构](初识matplotlib.assets/matplotlib图像结构.jpeg)
+![matplotlib图像结构](初识matplotlib.assets/matplotlib图像结构.jpeg) 
