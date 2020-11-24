@@ -211,7 +211,74 @@ train_loader = DataLoader(dataset=dataset, batch_size=32, shuffle=True)
 
 
 
+# 模型的搭建
 
+## 模型定义三要素
+
+- 首先，必须继承`nn.Module`这个类，要让PyTorch知道这个类是一个Module
+- 其次，在\_\_init\_\_(self)中设置好需要的"组件"(如conv、pooling、Linear、BatchNorm等)
+- 最后，在forward(self,x)中用定义好的"组件"进行组装，就像搭积木，把网络结构搭建出来，这样一个模型就定义好了
+
+### nn.Sequetial
+
+> torch.nn.Sequetial 其实就是Sequetial容器，该容器将一系列操作按照先后顺序给包起来，方便重复使用
+
+```python
+  def __init__(self):
+        super(Net, self).__init__()
+        # self.cov1 = torch.nn.Conv2d(1, 10, kernel_size=5)
+        # self.cov2 = torch.nn.Conv2d(10, 20, kernel_size=5)
+        # self.pooling = torch.nn.MaxPool2d(2)
+        # self.activateF = torch.nn.ReLU()
+
+        self.left = torch.nn.Sequential(      #等价于上面注释的几行
+            torch.nn.Conv2d(1, 10, kernel_size=5),
+            torch.nn.ReLU(),
+            torch.nn.MaxPool2d(2),
+            torch.nn.Conv2d(10, 20, kernel_size=5),
+            torch.nn.ReLU(),
+            torch.nn.MaxPool2d(2)
+        )
+        self.fc = torch.nn.Linear(320, 10)
+        
+   def forward(self, x):
+        batch_size = x.size(0)
+        # x = self.pooling(self.activateF(self.cov1(x)))
+        # x = self.pooling(self.activateF(self.cov2(x)))
+        x = self.left(x)  #上两行可以用这一行代替
+        x = x.view(batch_size, -1)
+        x = self.fc(x)
+        return x
+```
+
+
+
+## 模型finetune
+
+> 一个良好的权值初始化，可以使得模型收敛速度加快，甚至可以获得很好的精度。在实际应用中，我们通常采用一个已经训练好的模型的权值参数作为我们模型的初始化参数，也称之为`Finetune`，更宽泛地称之为迁移学习。迁移学习中的Finetune技术，本质上就是让我们新构建的模型拥有一个较好的权值初始值。
+
+finetune权值初始化三步曲，finetune就相当于给模型进行初始化，其流程分为三步：
+
+- 保存模型(参数)，拥有一个预训练模型
+- 加载模型，把预训练模型中的权值取出来
+- 初始化，将权值对应地放到新模型中
+
+```python
+# 1、保存模型参数，假设创建了一个net = Net()，并经过训练，通过以下方式保存：
+torch.save(net.state_dict(),'net_params.pkl')
+
+# 2、加载模型(这里只是加载模型的参数)
+pretrained_dict = torch.load('net_params.pkl')
+
+# 3、初始化，将取到的权值对应放到新的模型中
+#首先，我们创建新的模型，并且获取新模型的参数字典 net_state_dict:
+net = Net()
+net_state_dict = net.state_dict()
+#接着将pretrained_dict中不属于net_state_dict的键剔除掉：
+pretrained_dict_1 = {k:v for k,v in pretrained_dict.items() if k in net_state_dict}
+#然后用预训练模型的参数字典对新模型的参数字典进行更新：
+net_state_dict.update(pretrained_dict_1)
+```
 
 
 

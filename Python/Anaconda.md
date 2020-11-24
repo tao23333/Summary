@@ -8,11 +8,19 @@
 
 
 
-# 下载
+# 下载/安装
 
-清华大学开源镜像：https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/
+## 下载的两种方式：
 
-运行命令将包管理源修改为国内：
+- 清华大学开源镜像：https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/
+- 百度网盘/软件库
+
+## 安装注意：
+
+- 将安装路径添加到PATH（对应选项打上勾）
+- 安装完成后  cmd -> conda -V
+
+运行命令将包管理源修改为国内（**否则无法创建虚拟环境**）：
 
 ```bash
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
@@ -49,6 +57,8 @@ conda config --set show_channel_urls yes
 > 退出当前虚拟环境：deactivate 
 >
 > 删除虚拟环境：conda remove -n python37 --all
+
+- 注意：创建虚拟环境后，需要在该环境下先安装python：conda install python==3.7.0   否则，在该环境不能正常使用
 
 # 包管理
 
