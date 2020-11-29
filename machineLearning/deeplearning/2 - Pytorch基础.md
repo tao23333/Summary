@@ -5,6 +5,75 @@
 
 
 
+# 数据操作
+
+- 8种数据类型（int 5种，float 4种）
+
+![v2-95729ebb10269f807b0809fb09b125d0_720w](2 - Pytorch基础.assets/v2-95729ebb10269f807b0809fb09b125d0_720w.jpg) 
+
+- 默认创建的Tensor数据类型为float32
+
+## 查看Tensor数据类型
+
+- Tensor.dtype
+  - 现实的Tensor中每个数值的具体类型
+- Tensor.type()
+  - 该方法可以显示Tensor是否在GPU上
+
+## 将Tensor移至GPU
+
+```python
+a = torch.Tensor(1.1)
+a = a.cuda()   # 等价于 a = a.to('cuda')   ，默认是放到第一块GPU卡cuda:0上
+```
+
+
+
+## 创建Tensor
+
+- torch.Tensor(数据)
+- torch.LongTensor(形状)    # 生成的数据都是未初始化的随机数，有的数很大，有的数很小
+- torch.ones(形状)
+- torch.zeros(形状)
+- torch.eye(形状)
+- torch.randn(形状)     从均值为0，方差为1的正态分布数据取样
+- torch.normal(mean=,std=)   从相互独立的正态分布中分别取样
+  - ![2020-11-28_162306](2 - Pytorch基础.assets/2020-11-28_162306.png) 
+  - -0.0209是从均值为1，方差为1的正态分布取样；3.2177是否均值为2，方差为0.9的正态分布取样...
+- torch.rand(形状)    从[0,1]均为分布中随机取样
+- torch.randint(min,max,形状)    从[min,max)中离散均匀整数取样
+- torch.full(形状,7,dtype=torch.float32)   生成数据全是7的Tensor
+- torch.arange(0,10,2)  生成[0,10)公差为2的等差数列
+- torch.linspace(0,10,steps=4) 生成0-10的4个数构成的等差数列
+- torch.logspace(1,2,steps=4) 生成起始值为10\^1，终止值为10\^2的4个数构成的等比数列
+  - ![2020-11-28_160330](2 - Pytorch基础.assets/2020-11-28_160330.png) 
+- torch.randperm(4)  从0开始生成4个自然数0，1，2，3。每次执行生成的自然数顺序会不同
+  - 可以用来交换行之间或列之间的数据
+  -  ![2020-11-28_160105](2 - Pytorch基础.assets/2020-11-28_160105.png) 
+
+![2020-11-28_145709](2 - Pytorch基础.assets/2020-11-28_145709.png) 
+
+## Tensor常用属性和方法
+
+### 形状
+
+- torch.shape
+- torch.size()
+
+### 维度
+
+- torch.dim()
+
+### 元素数量
+
+- torch.numel()
+
+
+
+ 
+
+
+
 # 加载数据集
 
 > 使用Pytorch读取图片，主要是通过`Dataset`类，该类作为所有datasets(自定义的类)的基类存在，所有的datasets都要继承它，类似与C++中的虚基类
