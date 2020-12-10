@@ -1,6 +1,8 @@
-> 图像的输入数据要将其格式变为（batch，channel，width，height）
+# 卷积层和池化层
+
+> 图像的输入数据要将其格式变为（batch，channel，height，weight）
 >
-> 用Pytorch读入图像，默认为W,H,C，要用transform将其转为C,W,H；还要将格式转为Tensor，默认读进来时PIL Image
+> 用Pytorch读入图像，默认为W,H,C，要用transform将其转为C,H,W；还要将格式转为Tensor，默认读进来时PIL Image
 
 > 卷积层：使原信号特征增强，并降低噪音
 >
@@ -21,6 +23,76 @@
       1,1,3,3分别为output_channel,input_channel,w,h
 
 - 池化层一般为最大池化和平均池化。图像经过池化后，通道channel不变，大小w,h要变
+
+  - `torch.nn.MaxPool2d(2)`
+
+    - MaxPool2d参数必须有kernel_size
+
+      可选择 stride，padding
+
+## 卷积层
+
+- `torch.nn.Conv2d(3,2,kernel_size=3,stirde=2)`
+
+![20160707204048899](4 - CNN.assets/20160707204048899.gif) 
+
+三种卷积方式：
+
+- full mode
+
+![20180515205400757](4 - CNN.assets/20180515205400757.jpeg) 
+
+- same mode
+
+![20180515205624201](4 - CNN.assets/20180515205624201.jpeg) 
+
+- valid mode
+
+![20180515205946981](4 - CNN.assets/20180515205946981.jpeg) 
+
+> - 最常用的是same卷积和valid卷积
+>
+> - 在CNN中卷积一般都是same卷积，输入图像在经过卷积之后的输出图像要保持大小不变，通道数一般会有变化。
+>
+>   - 要想保持大小不变，则要根据卷积核大小设置padding；如果卷积核大小为n，则每边需要添加n/2（向下取整）层
+>
+>   - 如果要经过卷积操作改变图像大小，则设置stride；
+>
+>     设输入图像大小为N*M, stride=n时，输出图像大小为N/n * M/n，（均向上取整）
+>
+> - 如果不设置padding，则为valid卷积
+>
+>   - 不设置stride(默认=1)：kernel_size=n，输出图像大小为：(N-(n-1)) * (M-(n-1))
+>   - stride=m，kernel_size=n
+>     - 输出图像大小计算方式为：先计算不设置stride的输出图像大小，然后/m（向上取整）
+
+
+
+## 池化层
+
+- Max Pooling 2*2
+
+![1093303-20170430195106397-414671399](4 - CNN.assets/1093303-20170430195106397-414671399.jpg) 
+
+> - 池化层默认stride大小与kernel_size相同
+> - 默认padding=0
+> - 输入图像大小为N*M，kernel_size=n（则stride默认=n），则输出图像大小计算方式为：
+>   - 先计算stride=1的输出图像大小：(N-(n-1))*(M-(n-1))，然后/n（向上取整）
+
+
+
+## 测试程序
+
+```python
+import torch
+
+input = torch.FloatTensor(1, 3, 224, 224)
+conv_layer = torch.nn.Conv2d(3, 64, kernel_size=(7, 7), stride=2, padding=3)
+pooling_layer = torch.nn.MaxPool2d(kernel_size=3, stride=3)
+output = pooling_layer(conv_layer(input))
+# output = conv_layer(input)
+print(output.shape)
+```
 
 
 
