@@ -39,8 +39,8 @@ a = a.cuda()   # 等价于 a = a.to('cuda')   ，默认是放到第一块GPU卡c
 - torch.randn(形状)     从均值为0，方差为1的正态分布数据取样
 - torch.normal(mean=,std=)   从相互独立的正态分布中分别取样
   - ![2020-11-28_162306](2 - Pytorch基础.assets/2020-11-28_162306.png) 
-  - -0.0209是从均值为1，方差为1的正态分布取样；3.2177是否均值为2，方差为0.9的正态分布取样...
-- torch.rand(形状)    从[0,1]均为分布中随机取样
+  - -0.0209是从均值为1，方差为1的正态分布取样；3.2177是从均值为2，方差为0.9的正态分布取样...
+- torch.rand(形状)    从[0,1]均匀分布中随机取样
 - torch.randint(low=0,high,size)    从[low,high)中整数取样
   - `torch.randint(high=100,size=(10,1))`  # 生成10个标签，范围：[0,100)
 - torch.full(形状,7,dtype=torch.float32)   生成数据全是7的Tensor
