@@ -119,8 +119,9 @@ from torch.utils.data import Dataset
 
 class MyDataset(Dataset):
     def __init__(self, txt_path, transform=None):   #transform用于数据的预处理(增强，标准化)
-        fh = open(txt_path, 'r')
+        f = open(txt_path, 'r')
         imgs = []
+        fh = f.readlines()
         for line in fh:
             line = line.rstrip()
             words = line.split()
