@@ -44,7 +44,7 @@
 
 # 开机后配置
 
-## 换源
+## 软件换源
 
 ### apt-get换源
 
@@ -92,6 +92,18 @@
 > ```
 >
 > - 先按键盘上的`ctrl`+`o`，再按回车保存，再按`ctrl`+`x`退出nano编辑器回到命令行界面
+
+
+
+## 系统换源
+
+`sudo nano /etc/apt/sources.list.d/raspi.list`
+
+用 # 注释掉原来的内容，添加如下两行内容
+
+`deb http://mirrors.tuna.tsinghua.edu.cn/raspberrypi/buster main ui`
+
+`deb-src http://mirrors.tuna.tsinghua.edu.cn/raspberrypi/buster main ui`
 
 ---
 
