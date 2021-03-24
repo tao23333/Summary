@@ -12,3 +12,16 @@
 
 
 具体教程参见pdf文档
+
+
+
+恢复系统默认设置
+
+```python
+systemctl stop retroarch
+
+rm .config/retroarch/retroarch.cfg
+
+reboot
+```
+
