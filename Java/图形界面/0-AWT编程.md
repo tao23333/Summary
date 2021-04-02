@@ -78,11 +78,19 @@ public static void main(String[] args) {
 }
 ```
 
-> 补：Eclipse中文乱码解决方法：
+> 补：
 >
-> 在Arguments标签下的VM arguments中添加下面这行参数代码，然后点击应用。
+> - Eclipse中文乱码解决方法：
+>
+>    在Arguments标签下的VM arguments中添加下面这行参数代码，然后点击应用。
 >
 >   ` -Dfile.encoding=GB18030`
+>
+> - IDEA  VM-options添加参数：
+>
+>   `Dfile.encoding=gbk`
+>
+> 
 
 
 
@@ -407,49 +415,311 @@ colorList.add("blue");
 
 
 
+## 事件处理机制
+
+> 前面介绍了如何放置各种组件，从而得到丰富的图像界面，但这些界面还不能响应用户的任何操作，比如单击前面所有窗口右上角的“X”按钮，但窗口依然不会关闭。因为在AWT编程中，所有用户的操作，都需要经过一套时间处理机制来完成，而Frame和组件本身并没有时间处理的能力。
+
+### GUI事件处理机制
+
+定义：
+
+- 当在某个组件（事件源）上发生某些操作（事件）的时候，会自动触发一段代码（事件监听器）的执行
+  - 事件源（Event Source）：操作发生的场所，通常指某个组件，例如按钮，窗口等；
+  - 事件（Event）：在事件源发生的操作叫做事件，GUI把事件都封装到一个Event对象中，如果需要知道该事件的详细信息，就可以通过Event对象来获取
+  - 事件监听器（Event Listener）：当在某个事件源上发生了某个事件，事件监听器就可以对这个事件进行处理
+  - 注册监听：把某个事件监听器(A)通过事件(B)绑定到某个事件源(C)上，在当事件源C发生了事件B之后，那么事件监听器A的代码就会自动执行
 
 
 
+步骤：
+
+- 创建事件源组件对象
+- 自定义类，实现XXXListener接口，重写方法
+- 创建事件监听器对象（第二步自定义类的对象）
+- 调用事件源组建对象的addXXXListener方法完成注册监听
 
 
 
+```java
+public class Listener {
+	
+	Frame frame = new Frame("Box");
+	
+	TextField tf = new TextField(30);
+	
+	Button ok = new Button("确定");
+	
+	public void init() {
+		MyListener myListener = new MyListener();
+		ok.addActionListener(myListener);
+		
+		frame.add(tf, BorderLayout.NORTH);
+		frame.add(ok);
+		
+		frame.pack();
+		frame.setVisible(true);
+	}
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+	
+		new Listener().init();
+	}
+	
+	private class MyListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			tf.setText("hello");
+		}
+		
+	}
+}
+```
 
 
 
+### GUI中常见的事件和事件监听器
+
+> ​		事件监听器必须实现事件监听器接口；AWT提供了大量的事件监听器接口用于实现不同类型的事件监听器，用于监听不同类型的事件。AWT中提供了丰富的事件类，用于封装不同组件上所发生的特定操作，AWT的事件类都是AWTEvent类的子类，AWTEvent是EventObject的子类
 
 
 
+AWT把事件分成了两大类：
+
+- 低级事件：这类事件是基于某个特定动作的事件。比如进入，点击，拖放等动作的鼠标事件，再比如得到焦点和失去焦点等焦点事件
+
+|      事件      |                           触发时机                           |
+| :------------: | :----------------------------------------------------------: |
+| ComponentEvent | 组件事件，当组件尺寸发生变化、位置发生移动、显示/隐藏状态发生改变时触发该事件 |
+| ContainerEvent |     容器事件，当容器里发生添加组件、删除组件时出发该事件     |
+|  WindowEvent   | 窗口事件，当窗口状态发生改变（如打开/关闭/最大化/最小化）时触发该事件 |
+|   FocusEvent   |          焦点事件，当组件得到/失去焦点时触发该事件           |
+|    KeyEvent    |        键盘事件，当按键被按下，松开，单击时触发该事件        |
+|   MouseEvent   | 鼠标事件，当进行单击，按下，松开，移动鼠标等动作时触发该事件 |
+|   PaintEvent   | 组件绘图事件，该事件是一个特殊的事件类型，当GUI组件调用update/paint方法来呈现自身时触发该事件，该事件并非专用于时间处理模型 |
 
 
 
+- 高级事件：这类事件并不会基于某个特定动作，而是根据功能含义定义的事件
+
+|      事件      |                           触发时机                           |
+| :------------: | :----------------------------------------------------------: |
+|  ActionEvent   | 动作事件，当按钮、菜单项被单击，在TextField中按Enter键时被触发 |
+| AjustmentEvent |      调节事件，在滑动条上移动滑块以调节数值时触发该事件      |
+|   ItemEvent    |     选项事件，当用户选中某项，或取消选中某项时触发该事件     |
+|   TextEvent    |    文本事件，当文本框、文本域里的文本发生改变时触发该事件    |
 
 
 
+==事件监听器==
+
+不同的事件需要使用不同的监听器监听，不同的监听器需要实现不同的监听器接口，当指定事件发生后，事件监听器就会调用所包含的时间处理器（实例方法）来处理事件。
+
+|    事件类别     |         描述信息          |    监听器接口名     |
+| :-------------: | :-----------------------: | :-----------------: |
+|   ActionEvent   |         激活组件          |   ActionListener    |
+|    ItemEvent    |      选择了某些项目       |    ItemListener     |
+|   MouseEvent    |         鼠标移动          | MouseMotionListener |
+|   MouseEvent    |         鼠标点击          |    MouseListener    |
+|    KeyEvent     |         键盘输入          |     KeyListener     |
+|   FocusEvent    |     组件收到/失去焦点     |    FocusListener    |
+| AdjustmentEvent |    移动了滚动条等组件     | AdjustmentListener  |
+| ComponentEvent  |  对象移动缩放显示隐藏等   |  ComponentListener  |
+|   WindowEvent   |   窗口收到了窗口级事件    |   WindowListener    |
+| ContainerEvent  |   容器中增加/删除了组件   |  ContainerListener  |
+|    TextEvent    | 文本字段/文本区发生了改变 |    TextListener     |
 
 
 
+```java
+// 点击X使得窗口关闭
+frame.addWindowListener(new WindowAdapter(){
+
+    public void windowClosing(WindowEvent e) {
+        System.exit(0);
+    }
+});
+```
 
 
 
+## 菜单组件
+
+​		在实际开发中，除了主界面，还有一类比较重要的内容就是菜单相关组件，可以通过菜单相关组件很方便地使用特定的功能，在AWT中，菜单相关组件的使用和之前学习的组件是一模一样的，只需要把菜单条，菜单，菜单项组合到一起，按照一定的布局，放入到容器中即可。
+
+下表给出常见的菜单组件
+
+|   菜单组件名称   |                             功能                             |
+| :--------------: | :----------------------------------------------------------: |
+|     MenuBar      |                      菜单条，菜单的容器                      |
+|       Menu       | 菜单组件，菜单项的容器。它也是MenuItem的子类，所以可作为菜单项使用 |
+|     MenuItem     |                          菜单项组件                          |
+|    PopupMenu     |          上下文菜单组件(右键菜单组件)，菜单项的容器          |
+| CheckboxMenuItem |                        复选框菜单组件                        |
+
+总体思路：MenuBar 包含 Menu 包含 MenuItem
+
+![2021-03-30_153253](0-AWT编程.assets/2021-03-30_153253.png) 
 
 
 
+小技巧：
+
+- 如果要在某个菜单的菜单项之间添加分隔线，那么只需调用Menu的add(new MenuItem("-"))即可
+- 如果要给某个菜单项关联快捷键功能，那么只需要在创建菜单项对象时设置即可，例如要给菜单项关联Ctrl+Shift+Q快捷键，只需要：`new MenuItem("菜单项名字",new MenuShortcut(KeyEvent.VK_Q,true))`     Ctrl默认使用，true表示使用Shift
 
 
 
+```java
+package com;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+
+public class MenuTest {
+	
+	Frame frame = new Frame();
+	MenuBar menuBar = new MenuBar();
+	
+	Menu fileMenu = new Menu("文件");
+	Menu editMenu = new Menu("编辑");
+	Menu formatMenu = new Menu("格式");
+	
+	MenuItem menuItem1 = new MenuItem("复制");
+	MenuItem menuItem2 = new MenuItem("粘贴");
+	MenuItem menuItem3 = new MenuItem("其他");
+	MenuItem menuItem4 = new MenuItem("注释",new MenuShortcut(KeyEvent.VK_Q,true));
+	MenuItem menuItem5 = new MenuItem("取消注释");
+	
+	
+	// 实现组装
+	public void init() {
+        
+        // 为某一个MenuItem添加点击事件
+		menuItem4.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				System.out.println(123);
+			}
+			
+		});
+		
+		
+		formatMenu.add(menuItem4);
+		formatMenu.add(menuItem5);
+		editMenu.add(menuItem1);
+		editMenu.add(menuItem2);
+		editMenu.add(menuItem3);
+		editMenu.add(formatMenu);
+		menuBar.add(fileMenu);
+		menuBar.add(editMenu);
+        
+        // frame设置MenuBar
+		frame.setMenuBar(menuBar);
+		
+		frame.pack();
+		frame.setVisible(true);
+	}
+	
+	public static void main(String[] args) {
+		new MenuTest().init();
+	}
+}
+```
 
 
 
+### PopupMenu的使用
+
+```java
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+/**
+ * @Author: sxu_wushijie
+ * @Date: 2021/3/30 下午 05:35
+ */
+public class PopupMenuTest {
+    Frame frame = new Frame("test");
+    TextArea textArea = new TextArea(10,30);
+    Panel p = new Panel();
+
+    PopupMenu popupMenu = new PopupMenu();
+    MenuItem menuItem1 = new MenuItem("注释");
+    MenuItem menuItem2 = new MenuItem("取消注释");
+    MenuItem menuItem3 = new MenuItem("其它");
+
+
+    public void init(){
+        popupMenu.add(menuItem1);
+        popupMenu.add(menuItem2);
+        popupMenu.add(menuItem3);
+
+        // 为panel添加鼠标点击事件
+        p.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                boolean flag = e.isPopupTrigger();  // true表示是鼠标邮件右键释放
+                if(flag){
+                    popupMenu.show(p,e.getX(),e.getY());
+                }
+            }
+        });
+        p.add(popupMenu);
+        frame.add(textArea,BorderLayout.NORTH);
+        frame.add(p);
+
+        // 设置panel的高和宽
+        p.setPreferredSize(new Dimension(600,400));
+        frame.pack();
+        frame.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new PopupMenuTest().init();
+    }
+}
+```
 
 
 
+## 绘图
+
+步骤：
+
+- 自定义类，继承Canvas类，重写paint(Graphics g)方法完成画图
+- 在paint方法内部，真正开始画图之前调用Graphics对象的setColor()、setFont()等设置画笔颜色等属性
+- 调用Graphics画笔的drawXxx()方法开始画图
+- 调用该自定义类对象的repaint()方法
 
 
 
+Graphics类的常用方法：
 
-
-
-
+|      方法名称      |        方法功能        |
+| :----------------: | :--------------------: |
+| setColor(Color c)  |        设置颜色        |
+| setFont(Font font) |        设置字体        |
+|     drawLine()     |        绘制直线        |
+|     drawRect()     |        绘制矩形        |
+|  drawRoundRect()   |      绘制圆角矩形      |
+|     drawOval()     |       绘制椭圆形       |
+|   drawPolygon()    |       绘制多边形       |
+|     drawArc()      |        绘制圆弧        |
+|   drawPolyline()   |        绘制折线        |
+|     fillRect()     |      填充矩形区域      |
+|  fillRoundRect()   |      填充圆角矩形      |
+|     fillOval()     |        填充椭圆        |
+|   fillPolygon()    |       填充多边形       |
+|     fillArc()      | 填充圆弧对应的扇形区域 |
+|    drawImage()     |        绘制位图        |
 
 
 
