@@ -3,7 +3,10 @@
 - `torch.from_numpy()`
 - `a.numpy()`
 
-
+```
+# Pytorch 和 TensorFlow 中的 tensor来源于数学, numpy中的ndarray来自数组.
+# 两者没有本质的区别
+```
 
 # 数据操作
 
@@ -20,6 +23,23 @@
 - Tensor.type()
   - 该方法可以显示Tensor是否在GPU上
 
+
+
+## 更改Tensor类型
+
+```python
+a = torch.Tensor([1, 2, 3])
+print(a.dtype)  # float32
+newTensor = a.int()
+print(newTensor)
+print(newTensor.dtype)  # int32
+b = newTensor.float()
+print(b)
+print(b.dtype)    # float32
+```
+
+
+
 ## 将Tensor移至GPU
 
 ```python
@@ -31,7 +51,11 @@ a = a.cuda()   # 等价于 a = a.to('cuda')   ，默认是放到第一块GPU卡c
 
 ## 创建Tensor
 
-- torch.Tensor(数据)
+- torch.Tensor(数据)   
+  - ==默认dtype为float32,其不能在初始时显明指定dtype; 不可能传入标量==
+  - 由于使用float32计算快于float64,深度学习一般使用float32
+- torch.tensor()
+  - ==默认dtype为float64,其可以在初始时显明指定dtype; 可以传入标量==
 - torch.LongTensor(形状)    # 生成的数据都是未初始化的随机数，有的数很大，有的数很小
 - torch.ones(形状)
 - torch.zeros(形状)
